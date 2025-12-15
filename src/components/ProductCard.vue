@@ -25,7 +25,7 @@ interface Product {
   title: string;
   description: string;
   price: number;
-  category: number;
+  category: string;
   imageUrl: string;
   available: boolean;
 }
