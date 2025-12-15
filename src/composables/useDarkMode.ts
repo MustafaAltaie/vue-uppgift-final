@@ -1,3 +1,4 @@
+// src>composables>useDarkMode.ts
 import { ref, watchEffect } from 'vue';
 
 const darkMode = ref(localStorage.getItem('theme') === 'dark');

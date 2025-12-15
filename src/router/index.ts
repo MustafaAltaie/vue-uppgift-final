@@ -1,3 +1,4 @@
+// src>router>index.ts
 import { createRouter, createWebHistory } from 'vue-router';
 import ProductList from '../views/ProductList.vue';
 import ProductDetail from '../views/ProductDetail.vue';

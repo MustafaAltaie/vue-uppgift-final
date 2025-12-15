@@ -1,3 +1,4 @@
+<!-- src>components>HelloWorld.vue -->
 <script setup lang="ts">
 import { ref } from 'vue'
 

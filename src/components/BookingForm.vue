@@ -1,3 +1,4 @@
+<!-- src>components>BookingForm.vue -->
 <template>
   <form @submit.prevent="submitBooking">
     <label>
@@ -21,6 +22,10 @@ import { saveBooking } from '../api/jsonbin';
 const props = defineProps({
   productId: String,
 });
+
+const emit = defineEmits<{
+  (e: 'bookingSuccess'): void
+}>();
 
 const startDate = ref('');
 const endDate = ref('');
@@ -54,8 +59,8 @@ async function submitBooking() {
 </script>
 
 <style scoped>
-.error {
-  color: red;
-  margin-top: 0.5rem;
-}
+  .error {
+    color: red;
+    margin-top: 0.5rem;
+  }
 </style>

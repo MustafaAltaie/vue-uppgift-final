@@ -1,14 +1,12 @@
+<!-- src>views>ProductDetail.vue -->
 <template>
   <div v-if="loading">Laddar produkt...</div>
   <div v-else-if="error">{{ error }}</div>
   <div v-else>
-    <h2>{{ product.name }}</h2>
-    <p>{{ product.shortDescription }}</p>
-    <ul>
-      <li v-for="(feature, i) in product.features" :key="i">• {{ feature }}</li>
-    </ul>
-    <p><strong>Pris:</strong> {{ product.price }} USD</p>
-
+    <img :src="product.imageUrl" alt="">
+    <h2>{{ product.title }}</h2>
+    <p>{{ product.description }}</p>
+    <p><strong>Pris:</strong> {{ product.price }}:-</p>
     <BookingForm :productId="product.id" @bookingSuccess="handleBookingSuccess" />
   </div>
 </template>
@@ -47,3 +45,10 @@ onMounted(() => {
   loadProduct();
 });
 </script>
+
+<style scoped>
+img {
+  width: 200px;
+  margin-top: 10px;
+}
+</style>
