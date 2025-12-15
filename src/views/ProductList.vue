@@ -165,7 +165,6 @@ onMounted(async () => {
 .categoryNav {
   display: flex;
   gap: 10px;
-  margin: 15px 0;
   flex-wrap: wrap;
 }
 
