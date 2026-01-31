@@ -90,16 +90,8 @@
 import { ref, onMounted, computed } from 'vue';
 import { fetchProducts } from '../api/jsonbin';
 import ProductCard from '../components/ProductCard.vue';
+import type { Product } from '../types/Product';
 
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  category: string;
-  imageUrl: string;
-  available: boolean;
-}
 
 const products = ref<Product[]>([]);
 const filteredProducts = ref<Product[]>([]);

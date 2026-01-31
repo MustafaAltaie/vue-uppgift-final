@@ -19,16 +19,7 @@
 </template>
 
 <script setup lang="ts">
-
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  category: string;
-  imageUrl: string;
-  available: boolean;
-}
+import type { Product } from '../types/Product';
 
 const props = defineProps<{ product: Product }>();
 </script>
