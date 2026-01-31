@@ -50,6 +50,8 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { fetchBookings, fetchProducts } from '../api/jsonbin';
+import type { Booking } from '../types/Bookings';
+import type { Product } from '../types/Product';
 
 const BIN_ID = '6752f136acd3cb34a8b5244f';
 const API_KEY = '$2a$10$9EwtZ4YUIirUFE6jfjXJGe.4/SkkaLUosXQgDaKBaKR3UcmEH920.';
@@ -63,22 +65,6 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
-interface Booking {
-  productId: string;
-  startDate: string;
-  endDate: string;
-  bookingDate: string;
-}
-
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  imageUrl: string;
-  category: string;
-}
 
 const loading = ref(false);
 const saving = ref(false);
