@@ -32,6 +32,26 @@
     </button>
   </nav>
 
+  <div class="priceWrapper">
+    <input
+      type="number"
+      placeholder="Min Price"
+      v-model.number="minPrice"
+      class="minPriceInput"
+    >
+    <input
+      type="number"
+      placeholder="Max Price"
+      v-model.number="maxPrice"
+    >
+    <button
+      @click="applyFilters"
+      class="priceButton"
+    >
+      Apply
+    </button>
+  </div>
+
   <div v-if="loading">Laddar produkter...</div>
   <div v-else-if="error">{{ error }}</div>
   <div v-if="!loading && filteredProducts.length === 0">
@@ -50,7 +70,7 @@
     <div class="smallCard" v-for="product in filteredProducts" :key="product.id">
       <img :src="product.imageUrl" alt="">
       <h4>{{ product.title }}</h4>
-      <p>{{ product.description }}</p>
+      <h6>{{ product.description }}</h6>
       <p>{{ product.price }}:-</p>
 
       <router-link :to="`/product/${product.id}`">
@@ -87,8 +107,11 @@ const loading = ref(false);
 const error = ref<string | null>(null);
 
 const searchTerm = ref('');
-const isGridView = ref(false);
+const isGridView = ref(true);
 const selectedCategory = ref<string | null>(null);
+
+const minPrice = ref<null | number>(null);
+const maxPrice = ref<null | number>(null);
 
 const categories = computed(() => {
   return [...new Set(products.value.map(p => p.category))];
@@ -112,7 +135,10 @@ function applyFilters() {
       selectedCategory.value === null ||
       product.category === selectedCategory.value;
 
-    return matchesSearch && matchesCategory;
+    const matchesPrice =
+      (minPrice.value === null || product.price >= minPrice.value) &&
+      (maxPrice.value === null || product.price <= maxPrice.value);
+    return matchesSearch && matchesCategory && matchesPrice;
   });
 }
 
@@ -155,6 +181,10 @@ onMounted(async () => {
   padding: 10px;
   border-radius: 20px 0 0 20px;
 }
+.dark .searchInput,
+.dark .searchButton {
+  border: none;
+}
 
 .searchButton {
   margin-left: -1px;
@@ -189,6 +219,25 @@ onMounted(async () => {
 
 .dark .categoryNav button.active {
   background: rgb(4, 57, 109);
+}
+
+.priceWrapper {
+  margin: 30px 0 20px 0;
+}
+.priceWrapper > input,
+.priceButton {
+  border: solid 1px;
+  margin-right: -1px;
+  padding: 10px;
+}
+.minPriceInput {
+  border-radius: 20px 0 0 20px;
+}
+.priceButton {
+  border-radius: 0 20px 20px 0;
+}
+.dark .priceButton {
+  border: none;
 }
 
 .smallCard {
@@ -240,5 +289,42 @@ h5 {
 
 .dark .cardButton {
   background-color: rgb(7, 85, 163);
+}
+
+@media (max-width: 600px) {
+  .tools {
+    padding: 20px 0 10px 0;
+  }
+  .tools > h6 {
+    display: none;
+  }
+  .categoryNav {
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: 20px;
+  }
+  .priceWrapper > input,
+  .priceButton {
+    width: calc(100% / 3);
+    text-align: center;
+  }
+  .smallCard {
+    justify-content: space-between;
+    gap: unset;
+    width: 100%;
+    padding-right: unset;
+    clip-path: unset;
+    padding: 0 10px;
+  }
+  .smallCard:hover {
+    transform: unset;
+  }
+  .smallCard > h6,
+  .smallCard > img {
+    display: none;
+  }
+  .cardButton {
+    padding: 5px;
+  }
 }
 </style>

@@ -256,4 +256,19 @@ h2 {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+@media (max-width: 600px) {
+  .bookingList {
+    gap: 25px;
+  }
+  .bookingCard {
+    flex-direction: column;
+  }
+  .bookingCard:hover {
+    transform: none;
+  }
+  .bookingCard img {
+    width: 100%;
+  }
+}
 </style>

@@ -66,4 +66,21 @@ const props = defineProps<{ product: Product }>();
     cursor: pointer;
     padding: 5px 30px;
   }
+  @media (max-width: 600px) {
+    .card {
+      width: 100%;
+      gap: 15px;
+    }
+    .card button {
+      width: 100%;
+      border-radius: 20px;
+      border: none;
+      padding: 10px;
+    }
+    .card > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 </style>
