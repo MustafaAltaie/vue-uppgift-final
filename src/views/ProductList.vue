@@ -33,23 +33,28 @@
   </nav>
 
   <div class="priceWrapper">
-    <input
-      type="number"
-      placeholder="Min Price"
-      v-model.number="minPrice"
-      class="minPriceInput"
-    >
-    <input
-      type="number"
-      placeholder="Max Price"
-      v-model.number="maxPrice"
-    >
-    <button
-      @click="applyFilters"
-      class="priceButton"
-    >
-      Apply
-    </button>
+    <div>
+      <input
+        type="number"
+        placeholder="Min Price"
+        v-model.number="minPrice"
+        class="minPriceInput"
+      >
+      <input
+        type="number"
+        placeholder="Max Price"
+        v-model.number="maxPrice"
+      >
+      <button
+        @click="applyFilters"
+        class="priceButton"
+      >
+        Apply
+      </button>
+    </div>
+    <div class="addItem">
+      <h1>+</h1>
+    </div>
   </div>
 
   <div v-if="loading">Laddar produkter...</div>
@@ -91,7 +96,6 @@ import { ref, onMounted, computed } from 'vue';
 import { fetchProducts } from '../api/jsonbin';
 import ProductCard from '../components/ProductCard.vue';
 import type { Product } from '../types/Product';
-
 
 const products = ref<Product[]>([]);
 const filteredProducts = ref<Product[]>([]);
@@ -214,9 +218,15 @@ onMounted(async () => {
 }
 
 .priceWrapper {
-  margin: 30px 0 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.priceWrapper > input,
+.addItem {
+  cursor: pointer;
+  padding: 0 30px
+}
+.priceWrapper > div > input,
 .priceButton {
   border: solid 1px;
   margin-right: -1px;
@@ -295,7 +305,11 @@ h5 {
     justify-content: flex-start;
     padding-bottom: 20px;
   }
-  .priceWrapper > input,
+  .priceWrapper {
+    flex-direction: column;
+    margin-top: 30px;
+  }
+  .priceWrapper > div > input,
   .priceButton {
     width: calc(100% / 3);
     text-align: center;
