@@ -52,9 +52,42 @@
         Apply
       </button>
     </div>
-    <div class="addItem">
+    <div class="addItem" title="Lägg till">
       <h1>+</h1>
     </div>
+  </div>
+
+  <div class="newItemForm">
+    <p>X</p>
+    <input
+      type="text"
+      placeholder="Title"
+    >
+    <textarea placeholder="description"></textarea>
+    <input
+      type="number"
+      placeholder="price"
+    >
+    <input
+      type="text"
+      placeholder="category"
+    >
+    <input
+      type="text"
+      placeholder="imageUrl"
+      v-model="imageLink"
+    >
+    <div>
+      <div>
+        <input type="checkbox" id="priceFormInput">
+        <label for="priceFormInput">available</label>
+      </div>
+      <img v-if="imageLink" src="" alt="">
+    </div>
+    <button
+    >
+      Add
+      </button>
   </div>
 
   <div v-if="loading">Laddar produkter...</div>
@@ -96,6 +129,7 @@ import { ref, onMounted, computed } from 'vue';
 import { fetchProducts } from '../api/jsonbin';
 import ProductCard from '../components/ProductCard.vue';
 import type { Product } from '../types/Product';
+import '../styles/newItemForm.css';
 
 const products = ref<Product[]>([]);
 const filteredProducts = ref<Product[]>([]);
@@ -108,6 +142,8 @@ const selectedCategory = ref<string | null>(null);
 
 const minPrice = ref<null | number>(null);
 const maxPrice = ref<null | number>(null);
+
+const imageLink = ref<null | string>(null);
 
 const categories = computed(() => {
   return [...new Set(products.value.map(p => p.category))];
