@@ -5,13 +5,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: solid 1px;
   background-color: #fff;
-  padding: 30px 20px 20px;
+  padding: 45px 20px 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border-radius: 25px;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px #00000088;
 }
 .newItemForm > p {
   position: absolute;
@@ -20,10 +20,14 @@
   padding: 0 10px;
   cursor: pointer;
 }
+.dark .newItemForm > p,
+.dark .newItemForm > div > div > label {
+    color: #000;
+}
 .newItemForm > input,
 .newItemForm > textarea {
-  border-radius: 20px;
-  border: solid 1px;
+  border-radius: 5px;
+  border: solid 0.5px;
   outline: none;
   padding: 10px;
   text-align: center;

@@ -15,6 +15,7 @@
     <h6>👈Klicka på knappen för att visa produkter som {{ isGridView ? 'lista' : 'rutnät' }} istället</h6>
   </div>
 
+  <!-- Category filter navbar -->
   <nav class="categoryNav" v-if="categories.length">
     <button
       :class="{ active: selectedCategory === null }"
@@ -32,6 +33,7 @@
     </button>
   </nav>
 
+  <!-- price filter form -->
   <div class="priceWrapper">
     <div>
       <input
@@ -52,25 +54,32 @@
         Apply
       </button>
     </div>
-    <div class="addItem" title="Lägg till">
+    <div class="addItem" title="Lägg till" @click="addFormState = true">
       <h1>+</h1>
     </div>
   </div>
 
-  <div class="newItemForm">
-    <p>X</p>
+  <!-- Add new item form -->
+  <div v-if="addFormState" class="newItemForm">
+    <p @click="[addFormState = false, clearForm()]">X</p>
     <input
       type="text"
       placeholder="Title"
+      v-model="titleText"
     >
-    <textarea placeholder="description"></textarea>
+    <textarea
+      placeholder="description"
+      v-model="descriptionText"
+    ></textarea>
     <input
       type="number"
       placeholder="price"
+      v-model="priceText"
     >
     <input
       type="text"
       placeholder="category"
+      v-model="categoryText"
     >
     <input
       type="text"
@@ -79,12 +88,13 @@
     >
     <div>
       <div>
-        <input type="checkbox" id="priceFormInput">
+        <input type="checkbox" id="priceFormInput" checked="true">
         <label for="priceFormInput">available</label>
       </div>
       <img v-if="imageLink" src="" alt="">
     </div>
     <button
+      v-if="titleText && descriptionText && priceText && categoryText && imageLink"
     >
       Add
       </button>
@@ -143,6 +153,11 @@ const selectedCategory = ref<string | null>(null);
 const minPrice = ref<null | number>(null);
 const maxPrice = ref<null | number>(null);
 
+const addFormState = ref(false);
+const titleText = ref<string | null>(null);
+const descriptionText = ref<string | null>(null);
+const priceText = ref<number | null>(null);
+const categoryText = ref<string | null>(null);
 const imageLink = ref<null | string>(null);
 
 const categories = computed(() => {
@@ -172,6 +187,14 @@ function applyFilters() {
       (maxPrice.value === null || product.price <= maxPrice.value);
     return matchesSearch && matchesCategory && matchesPrice;
   });
+}
+
+const clearForm = () => {
+  titleText.value = "";
+  descriptionText.value = "";
+  priceText.value = null;
+  categoryText.value = "";
+  imageLink.value = "";
 }
 
 onMounted(async () => {
