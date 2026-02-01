@@ -1,0 +1,193 @@
+.grid {
+  padding-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.searchInput,
+.searchButton {
+  border: 1px solid;
+  outline: none;
+  padding: 10px;
+  border-radius: 20px 0 0 20px;
+}
+.dark .searchInput,
+.dark .searchButton {
+  border: none;
+}
+
+.searchButton {
+  margin-left: -1px;
+  border-radius: 0 20px 20px 0;
+  cursor: pointer;
+}
+
+.categoryNav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.categoryNav button {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgb(104, 157, 210);
+  background: transparent;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.categoryNav button.active,
+.categoryNav button:hover {
+  background: rgb(104, 157, 210);
+  color: white;
+}
+
+.dark .categoryNav button {
+  border-color: rgb(4, 57, 109);
+}
+
+.dark .categoryNav button.active {
+  background: rgb(4, 57, 109);
+}
+
+.priceWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.addItem {
+  cursor: pointer;
+  padding: 0 30px
+}
+.priceWrapper > div > input,
+.priceButton {
+  border: solid 1px;
+  margin-right: -1px;
+  padding: 10px;
+}
+.minPriceInput {
+  border-radius: 20px 0 0 20px;
+}
+.priceButton {
+  border-radius: 0 20px 20px 0;
+}
+.dark .priceButton {
+  border: none;
+}
+
+.smallCard {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  height: 100px;
+  margin-top: 10px;
+  background-color: #eee;
+  width: fit-content;
+  padding-right: 65px;
+  border-left: solid 10px rgb(104, 157, 210);
+  transform: translateX(0);
+  transition: 0.3s;
+  clip-path: polygon(0 0, 100% 0, 95% 50%, 100% 100%, 0 100%);
+}
+
+.dark .smallCard {
+  background-color: #222;
+  color: #fff;
+  border-left: solid 10px rgb(4, 57, 109);
+}
+
+.smallCard:hover {
+  transform: translateX(10px);
+}
+
+.smallCard img {
+  height: 100%;
+  width: 150px;
+}
+
+h4 {
+  color: rgb(28, 105, 182);
+}
+
+h5 {
+  color: red;
+  font-size: 10px;
+}
+
+.cardButton {
+  padding: 5px 30px;
+  background-color: rgb(104, 157, 210);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.dark .cardButton {
+  background-color: rgb(7, 85, 163);
+}
+.cardTools {
+  position: absolute;
+  display: none;
+  top: 0;
+  padding: 0 10px;
+  align-items: center;
+  justify-content: space-around;
+  gap: 10px;
+}
+.cardTools > p {
+  cursor: pointer;
+  font-size: 12px;
+}
+.cardTools > p:nth-child(1) {
+  font-size: 10px;
+}
+
+
+@media (max-width: 600px) {
+  .tools {
+    padding: 20px 0 10px 0;
+  }
+  .tools > h6 {
+    display: none;
+  }
+  .categoryNav {
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: 20px;
+  }
+  .priceWrapper {
+    flex-direction: column;
+    margin-top: 30px;
+  }
+  .priceWrapper > div > input,
+  .priceButton {
+    width: calc(100% / 3);
+    text-align: center;
+  }
+  .smallCard {
+    justify-content: space-between;
+    gap: unset;
+    width: 100%;
+    padding-right: unset;
+    clip-path: unset;
+    padding: 0 10px;
+  }
+  .smallCard > h6,
+  .smallCard > img {
+    display: none;
+  }
+  .cardButton {
+    padding: 5px;
+  }
+}
