@@ -73,6 +73,7 @@
       v-for="product in filteredProducts"
       :key="product.id"
       :product="product"
+      :bookings="bookings"
       @update="updateItem"
       @delete="deleteItem"
     />
@@ -97,6 +98,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { fetchProducts } from '../api/jsonbin';
+import { fetchBookings } from '../api/jsonbin';
 import ProductCard from '../components/ProductCard.vue';
 import type { Product } from '../types/Product';
 import '../styles/newItemForm.css';
@@ -104,8 +106,10 @@ import '../styles/productList.css';
 import { saveItem } from '../api/jsonbin';
 import ProductCardSmall from '../components/ProductCardSmall.vue';
 import { watch } from 'vue';
+import type { Booking } from '../types/Bookings';
 
 const products = ref<Product[]>([]);
+const bookings = ref<Booking[]>([]);
 const filteredProducts = ref<Product[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
@@ -270,14 +274,16 @@ const clearForm = () => {
   imageLink.value = "";
 }
 
-
 onMounted(async () => {
   loading.value = true;
   error.value = null;
 
   try {
     products.value = await fetchProducts();
+    const data = await fetchBookings();
+    bookings.value = data;
     applyFilters();
+    console.log(bookings.value)
   } catch (e) {
     error.value = 'Kunde inte ladda produkter.';
   } finally {

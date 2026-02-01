@@ -14,7 +14,10 @@
       <h6 v-if="!product.available">
         Ej tillgänglig för tillfället
       </h6>
-      <router-link :to="`/product/${product.id}`">
+      <p class="bookedText" v-if="bookingsArray.some(b => Number(b.productId) === Number(product.id))">
+        Bokad
+      </p>
+      <router-link :to="`/product/${product.id}`" v-else>
         <button v-if="product.available">
           Boka nu
         </button>
@@ -23,8 +26,14 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { Product } from '../types/Product';
-const props = defineProps<{ product: Product }>();
+import type { Booking } from '../types/Bookings';
+const props = defineProps<{
+  product: Product
+  bookings?: Booking[]
+}>();
+const bookingsArray = computed(() => props.bookings ?? []);
 </script>
 
 <style scoped>
@@ -65,6 +74,16 @@ button {
 }
 .card:hover > .cardTools {
   display: flex;
+}
+.bookedText {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%) rotate(65deg);
+  color: green;
+  font-weight: bold;
+  font-size: 80px;
+  opacity: 0.3;
 }
 
 @media (max-width: 600px) {
