@@ -1,5 +1,5 @@
 export interface Booking {
-  productId: string;
+  productId: number;
   startDate: string;
   endDate: string;
   bookingDate: string;

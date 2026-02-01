@@ -2,7 +2,7 @@
 <template>
     <div class="card">
       <div class="cardTools">
-          <p class="deleteItem">❌</p>
+          <p class="deleteItem" @click="$emit('delete', product.id)">❌</p>
           <p class="updateItem" @click="$emit('update', product)">✏️</p>
       </div>
       <div>
@@ -24,8 +24,6 @@
 
 <script setup lang="ts">
 import type { Product } from '../types/Product';
-
-
 const props = defineProps<{ product: Product }>();
 </script>
 

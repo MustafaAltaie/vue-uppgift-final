@@ -1,8 +1,10 @@
 // src>api>jsonbin.ts
 import axios from 'axios';
+import type { Product } from '../types/Product';
+import type { Booking } from '../types/Bookings';
 
-const BIN_ID = '6752f136acd3cb34a8b5244f';
-const API_KEY = '$2a$10$9EwtZ4YUIirUFE6jfjXJGe.4/SkkaLUosXQgDaKBaKR3UcmEH920.';
+const BIN_ID = import.meta.env.VITE_BIN_ID;
+const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 const axiosInstance = axios.create({
@@ -25,7 +27,7 @@ export async function fetchBookings() {
   return res.data.bookings || [];
 }
 
-export async function saveBooking(booking: any) {
+export async function saveBooking(booking: Booking) {
   const currentData = (await axiosInstance.get('')).data;
   currentData.bookings = currentData.bookings || [];
   currentData.bookings.push(booking);
@@ -34,7 +36,7 @@ export async function saveBooking(booking: any) {
   return res.data;
 }
 
-export async function saveItem(item: any) {
+export async function saveItem(item: Product) {
   const currentData = (await axiosInstance.get('')).data;
   currentData.items = currentData.items || [];
   currentData.items.push(item);

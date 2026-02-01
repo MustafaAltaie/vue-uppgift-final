@@ -1,8 +1,8 @@
 <template>
     <div class="smallCard">
         <div class="cardTools">
-            <p class="deleteItem">❌</p>
-            <p class="updateItem">✏️</p>
+            <p class="deleteItem" @click="$emit('delete', product.id)">❌</p>
+            <p class="updateItem" @click="$emit('update', product)">✏️</p>
         </div>
         <img :src="product.imageUrl" alt="">
         <h4>{{ product.title }}</h4>
