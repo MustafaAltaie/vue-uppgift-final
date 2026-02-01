@@ -27,7 +27,8 @@
 .newItemForm > input,
 .newItemForm > textarea {
   border-radius: 5px;
-  border: solid 0.5px;
+  box-shadow: 0 1px 3px #00000055;
+  border: none;
   outline: none;
   padding: 10px;
   text-align: center;

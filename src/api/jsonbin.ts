@@ -33,3 +33,12 @@ export async function saveBooking(booking: any) {
   const res = await axiosInstance.put('', currentData);
   return res.data;
 }
+
+export async function saveItem(item: any) {
+  const currentData = (await axiosInstance.get('')).data;
+  currentData.items = currentData.items || [];
+  currentData.items.push(item);
+
+  const res = await axiosInstance.put('', currentData);
+  return res.data;
+}

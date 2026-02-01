@@ -54,14 +54,14 @@
         Apply
       </button>
     </div>
-    <div class="addItem" title="Lägg till" @click="addFormState = true">
+    <div class="addItem" title="Lägg till" @click="addFormState(true)">
       <h1>+</h1>
     </div>
   </div>
 
   <!-- Add new item form -->
-  <div v-if="addFormState" class="newItemForm">
-    <p @click="[addFormState = false, clearForm()]">X</p>
+  <div v-if="productToEdit" class="newItemForm">
+    <p @click="[addFormState(false), clearForm()]">X</p>
     <input
       type="text"
       placeholder="Title"
@@ -95,6 +95,7 @@
     </div>
     <button
       v-if="titleText && descriptionText && priceText && categoryText && imageLink"
+      @click="createItem"
     >
       Add
       </button>
@@ -111,26 +112,16 @@
       v-for="product in filteredProducts"
       :key="product.id"
       :product="product"
+      @update="addFormState"
     />
   </div>
 
   <div v-else>
-    <div class="smallCard" v-for="product in filteredProducts" :key="product.id">
-      <img :src="product.imageUrl" alt="">
-      <h4>{{ product.title }}</h4>
-      <h6>{{ product.description }}</h6>
-      <p>{{ product.price }}:-</p>
-
-      <router-link :to="`/product/${product.id}`">
-        <button class="cardButton" v-if="product.available">
-          Boka nu
-        </button>
-      </router-link>
-
-      <h5 v-if="!product.available">
-        Ej tillgänglig
-      </h5>
-    </div>
+    <ProductCardSmall
+      v-for="product in filteredProducts"
+      :key="product.id"
+      :product="product"
+    />
   </div>
 </template>
 
@@ -140,6 +131,9 @@ import { fetchProducts } from '../api/jsonbin';
 import ProductCard from '../components/ProductCard.vue';
 import type { Product } from '../types/Product';
 import '../styles/newItemForm.css';
+import '../styles/productList.css';
+import { saveItem } from '../api/jsonbin';
+import ProductCardSmall from '../components/ProductCardSmall.vue';
 
 const products = ref<Product[]>([]);
 const filteredProducts = ref<Product[]>([]);
@@ -153,12 +147,16 @@ const selectedCategory = ref<string | null>(null);
 const minPrice = ref<null | number>(null);
 const maxPrice = ref<null | number>(null);
 
-const addFormState = ref(false);
 const titleText = ref<string | null>(null);
 const descriptionText = ref<string | null>(null);
 const priceText = ref<number | null>(null);
 const categoryText = ref<string | null>(null);
 const imageLink = ref<null | string>(null);
+
+const productToEdit = ref(false);
+const addFormState = (state: boolean) => {
+  productToEdit.value = state;
+}
 
 const categories = computed(() => {
   return [...new Set(products.value.map(p => p.category))];
@@ -197,6 +195,19 @@ const clearForm = () => {
   imageLink.value = "";
 }
 
+const createItem = async () => {
+  await saveItem({
+    id: Date.now(),
+    title: titleText.value,
+    description: descriptionText.value,
+    price: priceText.value,
+    category: categoryText.value,
+    imageUrl: imageLink.value,
+    available: new Date().toISOString(),
+  });
+}
+
+
 onMounted(async () => {
   loading.value = true;
   error.value = null;
@@ -211,185 +222,3 @@ onMounted(async () => {
   }
 });
 </script>
-
-<style scoped>
-.grid {
-  padding-top: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
-
-.tools {
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.searchInput,
-.searchButton {
-  border: 1px solid;
-  outline: none;
-  padding: 10px;
-  border-radius: 20px 0 0 20px;
-}
-.dark .searchInput,
-.dark .searchButton {
-  border: none;
-}
-
-.searchButton {
-  margin-left: -1px;
-  border-radius: 0 20px 20px 0;
-  cursor: pointer;
-}
-
-.categoryNav {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.categoryNav button {
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 1px solid rgb(104, 157, 210);
-  background: transparent;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.categoryNav button.active,
-.categoryNav button:hover {
-  background: rgb(104, 157, 210);
-  color: white;
-}
-
-.dark .categoryNav button {
-  border-color: rgb(4, 57, 109);
-}
-
-.dark .categoryNav button.active {
-  background: rgb(4, 57, 109);
-}
-
-.priceWrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.addItem {
-  cursor: pointer;
-  padding: 0 30px
-}
-.priceWrapper > div > input,
-.priceButton {
-  border: solid 1px;
-  margin-right: -1px;
-  padding: 10px;
-}
-.minPriceInput {
-  border-radius: 20px 0 0 20px;
-}
-.priceButton {
-  border-radius: 0 20px 20px 0;
-}
-.dark .priceButton {
-  border: none;
-}
-
-.smallCard {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  height: 100px;
-  margin-top: 10px;
-  background-color: #eee;
-  width: fit-content;
-  padding-right: 65px;
-  border-left: solid 10px rgb(104, 157, 210);
-  transition: 0.3s;
-  clip-path: polygon(0 0, 100% 0, 95% 50%, 100% 100%, 0 100%);
-}
-
-.dark .smallCard {
-  background-color: #222;
-  color: #fff;
-  border-left: solid 10px rgb(4, 57, 109);
-}
-
-.smallCard:hover {
-  transform: translateX(10px);
-}
-
-.smallCard img {
-  height: 100%;
-  width: 150px;
-}
-
-h4 {
-  color: rgb(28, 105, 182);
-}
-
-h5 {
-  color: red;
-  font-size: 10px;
-}
-
-.cardButton {
-  padding: 5px 30px;
-  background-color: rgb(104, 157, 210);
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.dark .cardButton {
-  background-color: rgb(7, 85, 163);
-}
-
-@media (max-width: 600px) {
-  .tools {
-    padding: 20px 0 10px 0;
-  }
-  .tools > h6 {
-    display: none;
-  }
-  .categoryNav {
-    display: flex;
-    justify-content: flex-start;
-    padding-bottom: 20px;
-  }
-  .priceWrapper {
-    flex-direction: column;
-    margin-top: 30px;
-  }
-  .priceWrapper > div > input,
-  .priceButton {
-    width: calc(100% / 3);
-    text-align: center;
-  }
-  .smallCard {
-    justify-content: space-between;
-    gap: unset;
-    width: 100%;
-    padding-right: unset;
-    clip-path: unset;
-    padding: 0 10px;
-  }
-  .smallCard:hover {
-    transform: unset;
-  }
-  .smallCard > h6,
-  .smallCard > img {
-    display: none;
-  }
-  .cardButton {
-    padding: 5px;
-  }
-}
-</style>
