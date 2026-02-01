@@ -1,0 +1,40 @@
+<template>
+    <div class="smallCard">
+        <div class="cardTools">
+            <p class="deleteItem">❌</p>
+            <p class="updateItem">✏️</p>
+        </div>
+        <img :src="product.imageUrl" alt="">
+        <h4>{{ product.title }}</h4>
+        <h6>{{ product.description }}</h6>
+        <p>{{ product.price }}:-</p>
+
+        <router-link :to="`/product/${product.id}`">
+        <button class="cardButton" v-if="product.available">
+            Boka nu
+        </button>
+        </router-link>
+
+        <h5 v-if="!product.available">
+        Ej tillgänglig
+        </h5>
+    </div>
+</template>
+
+<script setup lang="ts">
+import '../styles/productList.css';
+import type { Product } from '../types/Product';
+const props = defineProps<{ product: Product }>();
+</script>
+
+<style scoped>
+.cardTools {
+  display: none;
+  height: 100%;
+  width: 150px;
+  background: #444;
+}
+.smallCard:hover > .cardTools {
+    display: flex;
+}
+</style>
