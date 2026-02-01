@@ -1,36 +1,29 @@
 <!-- src>views>ProductList.vue -->
 <template>
-  <div class="tools">
-    <div>
-      <input
-        v-model="searchTerm"
-        placeholder="Sök produkter..."
-        @input="applyFilters"
-        class="searchInput"
-      />
-      <button @click="toggleView" class="searchButton">
-        {{ isGridView ? 'Visa som lista' : 'Visa som rutnät' }}
-      </button>
-    </div>
-    <h6>👈Klicka på knappen för att visa produkter som {{ isGridView ? 'lista' : 'rutnät' }} istället</h6>
-  </div>
+  <!-- <input
+    v-model="searchTerm"
+    placeholder="Sök produkter..."
+    @input="applyFilters"
+    class="searchInput"
+  />
+  <button @click="toggleView" class="searchButton">
+    {{ isGridView ? 'Visa som lista' : 'Visa som rutnät' }}
+  </button> -->
+  <ProductTools
+    v-model:searchTerm="searchTerm"
+    :isGridView="isGridView"
+    @toggleView="toggleView"
+  />
 
   <!-- Category filter navbar -->
   <nav class="categoryNav" v-if="categories.length">
-    <button
-      :class="{ active: selectedCategory === null }"
-      @click="selectCategory(null)"
-    >
-      Alla
-    </button>
+    <button :class="{ active: selectedCategory === null }" @click="selectCategory(null)">Alla</button>
     <button
       v-for="category in categories"
       :key="category"
       :class="{ active: selectedCategory === category }"
       @click="selectCategory(category)"
-    >
-      {{ category }}
-    </button>
+    >{{ category }}</button>
   </nav>
 
   <!-- price filter form -->
@@ -110,6 +103,7 @@ import '../styles/newItemForm.css';
 import '../styles/productList.css';
 import { saveItem } from '../api/jsonbin';
 import ProductCardSmall from '../components/ProductCardSmall.vue';
+import { watch } from 'vue';
 
 const products = ref<Product[]>([]);
 const filteredProducts = ref<Product[]>([]);
@@ -119,6 +113,10 @@ const error = ref<string | null>(null);
 const searchTerm = ref('');
 const isGridView = ref(true);
 const selectedCategory = ref<string | null>(null);
+
+watch(searchTerm, () => {
+  applyFilters();
+});
 
 const minPrice = ref<null | number>(null);
 const maxPrice = ref<null | number>(null);
@@ -149,6 +147,7 @@ const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 import axios from 'axios';
 import WaitingModal from '../composables/WaitingModal.vue';
+import ProductTools from '../components/ProductTools.vue';
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

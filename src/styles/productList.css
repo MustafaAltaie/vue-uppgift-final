@@ -6,32 +6,6 @@
   gap: 20px;
 }
 
-.tools {
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.searchInput,
-.searchButton {
-  border: 1px solid;
-  outline: none;
-  padding: 10px;
-  border-radius: 20px 0 0 20px;
-}
-.dark .searchInput,
-.dark .searchButton {
-  border: none;
-}
-
-.searchButton {
-  margin-left: -1px;
-  border-radius: 0 20px 20px 0;
-  cursor: pointer;
-}
-
 .categoryNav {
   display: flex;
   gap: 10px;
