@@ -26,7 +26,7 @@ async function loadProduct() {
   loading.value = true;
   try {
     const products = await fetchProducts();
-    product.value = products.find((p: any) => p.id === route.params.id);
+    product.value = products.find((p: any) => String(p.id) === route.params.id);
     if (!product.value) {
       error.value = 'Produkt hittades inte.';
     }

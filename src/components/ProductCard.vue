@@ -80,10 +80,9 @@ button {
   top: 50px;
   left: 50%;
   transform: translateX(-50%) rotate(65deg);
-  color: green;
   font-weight: bold;
   font-size: 80px;
-  opacity: 0.3;
+  opacity: 0.5;
 }
 
 @media (max-width: 600px) {

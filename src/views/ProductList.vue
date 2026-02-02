@@ -210,12 +210,11 @@ const deleteItem = async (id: string) => {
   error.value = null;
   try {
     const currentData = (await axiosInstance.get('')).data;
-    currentData.items = (currentData.items || []).filter(
-      (item: Product) => item.id !== Number(id)
-    );
-
+    currentData.items = (currentData.items || []).filter( (item: Product) => item.id !== Number(id) )
+    const currentDataB = (await axiosInstance.get('')).data;
+    currentDataB.bookings = (currentDataB.bookings || []).filter( (item: Product) => item.id !== Number(id) );
     await axiosInstance.put('', currentData);
-
+    await currentDataB.put('', currentData);
     filteredProducts.value = filteredProducts.value.filter(item => item.id !== Number(id));
     products.value = products.value.filter(item => item.id !== Number(id));
   } catch (err) {
