@@ -88,7 +88,7 @@ async function loadData() {
     enrichedBookings.value = bookings
       .map((booking: Booking) => {
         const product = products.find(
-          (p: Product) => p.id === booking.productId
+          (p: Product) => Number(p.id) === Number(booking.productId)
         );
         if (!product) return null;
         return { ...booking, product };

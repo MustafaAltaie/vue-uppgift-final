@@ -84,6 +84,7 @@
       v-for="product in filteredProducts"
       :key="product.id"
       :product="product"
+      :bookings="bookings"
       @update="updateItem"
       @delete="deleteItem"
     />

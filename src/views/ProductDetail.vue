@@ -1,13 +1,19 @@
 <!-- src>views>ProductDetail.vue -->
 <template>
-  <div v-if="loading">Laddar produkt...</div>
-  <div v-else-if="error">{{ error }}</div>
-  <div v-else>
-    <img :src="product.imageUrl" alt="">
-    <h2>{{ product.title }}</h2>
-    <p>{{ product.description }}</p>
-    <p><strong>Pris:</strong> {{ product.price }}:-</p>
-    <BookingForm :productId="product.id" @bookingSuccess="handleBookingSuccess" />
+  <div class="wrapper">
+    <div v-if="loading">Laddar produkt...</div>
+    <div v-else-if="error">{{ error }}</div>
+    <div v-else class="ProductDetailWrapper">
+      <div>
+        <img :src="product.imageUrl" alt="">
+      </div>
+      <div class="ProductDetailWrapper2">
+        <h2>{{ product.title }}</h2>
+        <p>{{ product.description }}</p>
+        <p><strong>Pris:</strong> {{ product.price }}:-</p>
+        <BookingForm :productId="product.id" @bookingSuccess="handleBookingSuccess" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -47,8 +53,49 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.wrapper {
+  background: #eee;
+  padding: 20px;
+  border-right: solid 1px;
+  border-left: solid 1px;
+  border-bottom: solid 1px;
+}
+.dark .wrapper {
+  background-color: #222;
+}
+.ProductDetailWrapper {
+  display: flex;
+}
+.ProductDetailWrapper > div {
+  width: 50%;
+}
 img {
-  width: 200px;
+  width: 100%;
   margin-top: 10px;
+}
+.ProductDetailWrapper2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px;
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    padding: 30px;
+  }
+  img {
+    margin-top: 0;
+  }
+  .ProductDetailWrapper {
+    flex-direction: column;
+  }
+  .ProductDetailWrapper > div {
+    width: 100%;
+    padding: 0;
+  }
+  .ProductDetailWrapper > div:nth-child(2) {
+    padding-top: 10px;
+  }
 }
 </style>

@@ -8,13 +8,14 @@
         <h4>{{ product.title }}</h4>
         <h6>{{ product.description }}</h6>
         <p>{{ product.price }}:-</p>
-
-        <router-link :to="`/product/${product.id}`">
+        <p class="bookedText" v-if="bookingsArray.some(b => Number(b.productId) === Number(product.id))">
+            Bokad
+        </p>
+        <router-link :to="`/product/${product.id}`" v-else>
         <button class="cardButton" v-if="product.available">
             Boka nu
         </button>
         </router-link>
-
         <h5 v-if="!product.available">
         Ej tillgänglig
         </h5>
@@ -22,9 +23,15 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import '../styles/productList.css';
 import type { Product } from '../types/Product';
-const props = defineProps<{ product: Product }>();
+import type { Booking } from '../types/Bookings';
+const props = defineProps<{
+    product: Product
+    bookings?: Booking[]
+}>();
+const bookingsArray = computed(() => props.bookings ?? []);
 </script>
 
 <style scoped>
@@ -36,5 +43,14 @@ const props = defineProps<{ product: Product }>();
 }
 .smallCard:hover > .cardTools {
     display: flex;
+}
+.bookedText {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 50px;
+  opacity: 0.5;
 }
 </style>
