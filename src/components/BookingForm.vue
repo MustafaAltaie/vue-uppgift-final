@@ -41,7 +41,7 @@ async function submitBooking() {
   error.value = null;
   try {
     await saveBooking({
-      productId: props.productId,
+      productId: Number(props.productId),
       startDate: startDate.value,
       endDate: endDate.value,
       bookingDate: new Date().toISOString(),
