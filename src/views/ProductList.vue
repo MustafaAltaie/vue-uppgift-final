@@ -68,7 +68,10 @@
     </button>
   </div>
 
-  <div v-if="loading">Laddar produkter...</div>
+  <WaitingModal
+    v-if="loading"
+    :waitingMessage="waitingMessage"
+  />
   <div v-else-if="error">{{ error }}</div>
   <div v-if="!loading && filteredProducts.length === 0">
     Inga produkter hittades.
@@ -260,6 +263,9 @@ const deleteItem = async (id: string) => {
   } finally {
     waiting.value = false;
     waitingMessage.value = '';
+    alert('Raderingen lyckades!');
+    applyFilters();
+    selectCategory(null);
   }
 }
 
@@ -328,6 +334,7 @@ const clearForm = () => {
 
 onMounted(async () => {
   loading.value = true;
+  waitingMessage.value = 'Laddar produkter...';
   error.value = null;
 
   try {

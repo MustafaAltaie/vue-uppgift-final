@@ -3,7 +3,10 @@
   <div class="bookings">
     <h2>📅 Bokningar</h2>
 
-    <div v-if="loading" class="state">Laddar bokningar...</div>
+    <WaitingModal
+      v-if="loading"
+      :waitingMessage="waitingMessage"
+    />
     <div v-else-if="error" class="state error">{{ error }}</div>
     <div v-else-if="enrichedBookings.length === 0" class="state">
       Inga bokningar hittades.
@@ -52,10 +55,13 @@ import axios from 'axios';
 import { fetchBookings, fetchProducts } from '../api/jsonbin';
 import type { Booking } from '../types/Bookings';
 import type { Product } from '../types/Product';
+import WaitingModal from '../composables/WaitingModal.vue';
 
 const BIN_ID = '6752f136acd3cb34a8b5244f';
 const API_KEY = '$2a$10$9EwtZ4YUIirUFE6jfjXJGe.4/SkkaLUosXQgDaKBaKR3UcmEH920.';
 const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+const waitingMessage = ref<string>('');
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -77,6 +83,7 @@ function formatDate(date: string) {
 
 async function loadData() {
   loading.value = true;
+  waitingMessage.value = 'Laddar bokningar...';
   error.value = null;
 
   try {
