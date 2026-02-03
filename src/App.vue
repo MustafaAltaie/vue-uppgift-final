@@ -4,8 +4,10 @@
     <button @click="toggleTheme" class="darkToggle">
       {{ darkMode ? 'Light Mode' : 'Dark Mode' }}
     </button>
-    <router-link :to="`/`">Hem</router-link>
-    <router-link :to="`/bookings/`">Mina bokningar</router-link>
+    <div>
+      <router-link :to="`/`">Hem</router-link>
+      <router-link :to="`/bookings/`">Mina bokningar</router-link>
+    </div>
   </nav>
 
   <router-view />
@@ -50,20 +52,31 @@ const { darkMode, toggleTheme } = useDarkMode();
     border-radius: 20px;
     padding: 10px;
     cursor: pointer;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
   nav {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 10px;
     border-bottom: solid 1px;
     padding: 10px;
   }
-  nav > a {
+  nav > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  nav > div > a {
     color: black;
     text-decoration: none;
+    background: #00000011;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
-  .dark nav > a {
+  .dark nav > div > a {
     color: white;
+    background: #ffffff22;
   }
   .dark button {
     background-color: rgb(7, 85, 163);
@@ -73,15 +86,18 @@ const { darkMode, toggleTheme } = useDarkMode();
   button {
     border-radius: 20px;
     border: none;
+    cursor: pointer;
   }
 
   @media (max-width: 600px) {
     .grid {
       flex-direction: column;
     }
-    nav {
-      gap: 0;
-      justify-content: space-between;
+    .navHeader {
+      flex-direction: column;
+    }
+    nav > div > a {
+      padding: 10px;
     }
   }
 </style>

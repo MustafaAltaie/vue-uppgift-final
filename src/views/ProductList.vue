@@ -38,6 +38,12 @@
     </div>
   </div>
 
+  <select v-model="sortOrder" @change="applyFilters">
+    <option :value="null">Inga sortering</option>
+    <option value="asc">Billigast</option>
+    <option value="desc">Dyrast</option>
+  </select>
+
   <!-- Add new item form -->
   <div v-if="productToEdit" class="newItemForm">
     <p @click="closeForm">X</p>
@@ -70,7 +76,7 @@
 
   <div v-if="isGridView" class="grid">
     <ProductCard
-      v-for="product in filteredProducts"
+      v-for="product in paginatedProducts"
       :key="product.id"
       :product="product"
       :bookings="bookings"
@@ -81,7 +87,7 @@
 
   <div v-else>
     <ProductCardSmall
-      v-for="product in filteredProducts"
+      v-for="product in paginatedProducts"
       :key="product.id"
       :product="product"
       :bookings="bookings"
@@ -94,6 +100,15 @@
     v-if="waiting"
     :waitingMessage="waitingMessage"
   />
+
+  <!-- pagination -->
+  <div class="pagination">
+  <button :disabled="currentPage === 1" @click="currentPage--">Tillbaka</button>
+  <p>Sidan {{ currentPage }}</p>
+  <button :disabled="currentPage * itemsPerPage >= filteredProducts.length" @click="currentPage++">
+    Nästa
+  </button>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -123,9 +138,13 @@ watch(searchTerm, () => {
   applyFilters();
 });
 
+// Sorting
 const minPrice = ref<null | number>(null);
 const maxPrice = ref<null | number>(null);
 
+const sortOrder = ref<'asc' | 'desc' | null>(null);
+
+// Form inputs
 const idText = ref<number | null>(null);
 const titleText = ref<string | null>(null);
 const descriptionText = ref<string | null>(null);
@@ -133,6 +152,10 @@ const priceText = ref<number | null>(null);
 const categoryText = ref<string | null>(null);
 const imageLink = ref<null | string>(null);
 const availablility = ref(true);
+
+// Pagination
+const currentPage = ref(1);
+const itemsPerPage = 5;
 
 const productToEdit = ref(false);
 const updateItem = (product:Product) => {
@@ -165,6 +188,14 @@ const axiosInstance = axios.create({
 
 const waiting = ref(false);
 const waitingMessage = ref<string>('');
+
+// Pagination
+watch(
+  [searchTerm, selectedCategory, minPrice, maxPrice, filteredProducts],
+  () => {
+    currentPage.value = 1;
+  }
+)
 
 const createUpadteItem = async () => {
   waiting.value = true;
@@ -204,20 +235,26 @@ const createUpadteItem = async () => {
 }
 
 const deleteItem = async (id: string) => {
-  const confirmDelete = confirm('Är du säker att du vill ta bort föremålet?');
-  if (!confirmDelete) return;
+  if (!confirm('Är du säker att du vill ta bort föremålet?')) return;
+
   waiting.value = true;
-  waitingMessage.value = 'Radering föremålet';
+  waitingMessage.value = 'Raderar föremålet';
   error.value = null;
+
   try {
     const currentData = (await axiosInstance.get('')).data;
-    currentData.items = (currentData.items || []).filter( (item: Product) => item.id !== Number(id) )
-    const currentDataB = (await axiosInstance.get('')).data;
-    currentDataB.bookings = (currentDataB.bookings || []).filter( (item: Product) => item.id !== Number(id) );
+    // Remove product
+    currentData.items = currentData.items.filter(
+      (item: Product) => item.id !== Number(id)
+    )
+    // Remove product from bookings as well
+    currentData.bookings = (currentData.bookings || []).filter(
+      (booking: Booking) => booking.productId !== Number(id)
+    )
     await axiosInstance.put('', currentData);
-    await currentDataB.put('', currentData);
-    filteredProducts.value = filteredProducts.value.filter(item => item.id !== Number(id));
-    products.value = products.value.filter(item => item.id !== Number(id));
+    // Update local array
+    products.value = products.value.filter(p => p.id !== Number(id));
+    applyFilters();
   } catch (err) {
     error.value = 'Kunde inte ta bort föremålet';
   } finally {
@@ -228,6 +265,12 @@ const deleteItem = async (id: string) => {
 
 const categories = computed(() => {
   return [...new Set(products.value.map(p => p.category))];
+});
+
+const paginatedProducts = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredProducts.value.slice(start, end);
 });
 
 function toggleView() {
@@ -242,7 +285,7 @@ function selectCategory(category: string | null) {
 function applyFilters() {
   const term = searchTerm.value.toLowerCase();
 
-  filteredProducts.value = products.value.filter(product => {
+  let result = products.value.filter(product => {
     const matchesSearch = product.title.toLowerCase().includes(term);
     const matchesCategory =
       selectedCategory.value === null ||
@@ -251,8 +294,17 @@ function applyFilters() {
     const matchesPrice =
       (minPrice.value === null || product.price >= minPrice.value) &&
       (maxPrice.value === null || product.price <= maxPrice.value);
+
     return matchesSearch && matchesCategory && matchesPrice;
   });
+
+  if (sortOrder.value === 'asc') {
+    result.sort((a, b) => a.price - b.price);
+  } else if (sortOrder.value === 'desc') {
+    result.sort((a, b) => b.price - a.price);
+  }
+
+  filteredProducts.value = result;
 }
 
 const closeForm = () => {

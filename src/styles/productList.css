@@ -127,6 +127,14 @@ h5 {
   font-size: 10px;
 }
 
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  user-select: none;
+}
+
 
 @media (max-width: 600px) {
   .tools {
