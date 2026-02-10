@@ -1,5 +1,15 @@
-# Vue 3 + TypeScript + Vite
+# Uthyrningsplattform
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+**Skola:** Chas Academy  
+**Kurs / Program:** Fullstack JavaScript Extended  
+**Student:** Mustafa Altaie  
+**Programmerad i:** Vue 3  
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Beskrivning
+Detta är en uppgift från Chas Academy, kallad **Uthyrningsplattform**. Projektet är byggt med Vue 3 och demonstrerar grundläggande funktioner för en uthyrningsplattform.  
+
+## Installation
+Efter att du har klonat projektet, se till att köra:
+
+```bash
+npm install
