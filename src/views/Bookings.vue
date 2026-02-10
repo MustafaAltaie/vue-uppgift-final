@@ -38,7 +38,7 @@
           <div class="price">{{ booking.product.price }}:-</div>
           <button
             class="deleteBtn"
-            :disabled="saving"
+            :disabled="loading"
             @click="deleteBooking(booking)"
           >
             ❌ Avboka
@@ -57,8 +57,8 @@ import type { Booking } from '../types/Bookings';
 import type { Product } from '../types/Product';
 import WaitingModal from '../composables/WaitingModal.vue';
 
-const BIN_ID = '6752f136acd3cb34a8b5244f';
-const API_KEY = '$2a$10$9EwtZ4YUIirUFE6jfjXJGe.4/SkkaLUosXQgDaKBaKR3UcmEH920.';
+const BIN_ID = import.meta.env.VITE_BIN_ID;
+const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 const waitingMessage = ref<string>('');
@@ -73,7 +73,6 @@ const axiosInstance = axios.create({
 });
 
 const loading = ref(false);
-const saving = ref(false);
 const error = ref<string | null>(null);
 const enrichedBookings = ref<(Booking & { product: Product })[]>([]);
 
@@ -111,8 +110,8 @@ async function loadData() {
 async function deleteBooking(bookingToDelete: Booking) {
   const confirmed = confirm('Är du säker på att du vill avboka denna bokning?');
   if (!confirmed) return;
-
-  saving.value = true;
+  loading.value = true;
+  waitingMessage.value = 'Avbokar...';
 
   try {
     const currentData = (await axiosInstance.get('')).data;
@@ -136,7 +135,7 @@ async function deleteBooking(bookingToDelete: Booking) {
   } catch (e) {
     alert('Kunde inte ta bort bokningen.');
   } finally {
-    saving.value = false;
+    loading.value = false;
   }
 }
 

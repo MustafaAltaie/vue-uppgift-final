@@ -50,7 +50,7 @@ async function submitBooking() {
   if (!confirmDeletion) return;
   loading.value = true;
   error.value = null;
-  waitingMessage.value = 'Bokning pågår';
+  waitingMessage.value = 'Bokning pågår...';
   try {
     await saveBooking({
       productId: Number(props.productId),
