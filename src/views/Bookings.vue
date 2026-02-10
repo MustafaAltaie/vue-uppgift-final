@@ -160,6 +160,9 @@ h2 {
   background: #eee;
   border-radius: 8px;
 }
+.dark .state {
+  background: #333;
+}
 
 .error {
   background: #ffd6d6;
